@@ -38,7 +38,8 @@
 
               shellHook = ''
         unset LC_ALL
-        EMACS=${pkgs.emacs29}/bin/emacs
+        export GIT_CONFIG=${self}/.gitconfig
+        export EMACS=${pkgs.emacs29}/bin/emacs
         source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
         GIT_PS1_SHOWDIRTYSTATE=true
         GIT_PS1_SHOWUNTRACKEDFILES=true
