@@ -6,11 +6,11 @@
     flake-utils.url = "github:numtide/flake-utils";
     doomemacssrc = {
       url = "github:hlissner/doom-emacs";
-      flake = "false";
+      flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+  outputs = { self, nixpkgs, flake-utils, doomemacssrc, ... }@inputs:
     flake-utils.lib.eachDefaultSystem
       (system:
         let
@@ -32,57 +32,99 @@
             program = "${exec}/bin/name";
           };
 
+          doomdir = ".doom.d";
+          emacsdir = "doom-emacsdir";
+
         in with pkgs;
           {
             ###################################################################
             #                             scripts                             #
             ###################################################################
-            # apps = {
-            #   default = simple_script "build" [] ''
-              
-            #   '';
+            apps = {
+              copy-doom-src = simple_script "build" [] ''
+                echo "cp -r ${doomemacssrc}/ ./emacsdir"
+                "$(which cp)"
+                #cp -r "${doomemacssrc}/" ./emacsdir
+              '';
 
-            # };
+            };
 
             ###################################################################
             #                             scripts                             #
             ###################################################################
             packages = {
 
-              default = mkDerivation {
+              doomemacs = stdenv.mkDerivation {
                 name = "doomemacs-3.0.0-pre";
                 src = ./.;
                 nativeBuildInputs = with pkgs; [
                   emacs29
                   git
                   (ripgrep.override {withPCRE2 = true;})
+                  fzf
+                  curl
+                  makeWrapper
+                  openssl
                 ];
+                buildInputs = with pkgs; [
+                  emacs29
+                  git
+                  (ripgrep.override {withPCRE2 = true;})
+                  fzf
+                  curl
+                  openssl
+                ];
+                unpackPhase = ''
+                   echo "Copy emacsdir from doom src ${doomemacssrc} to ./${emacsdir}"
+                   mkdir -p ./${emacsdir} ./${doomdir}
+                   cp -r ${self}/${doomdir}/ ./${emacsdir}/
+                   cp -r ${doomemacssrc}/* ./${emacsdir}/
+                   find ./${emacsdir} -type d | xargs -n1 chmod 774
+                   '';
+
                 buildPhase = ''
-                   ${doomemacs}/bin/doom install --emacsdir ${doomemacssrc} --doomdir ${self}/.doom.d
+                   echo "will run ./${emacsdir}/bin/doom --emacsdir ./${emacsdir} --doomdir ./${doomdir} install"
+                   pwd
+                   ls -la .
+                   ./${emacsdir}/bin/doom --emacsdir ./${emacsdir} --doomdir ./${doomdir} install --force --debug --no-env --no-config
                 '';
                 installPhase = ''
-                   mkdir -p $out/share/emacsdir
-                   mkdir -p $out/share/doomdir
-                   cp -r ${doomemacssrc}/* ${out}/share/emacsdir
-                   cp -r ${self}/.doom.d/* ${out}/share/doomdir
-                   makeWrapper ${out}/share/emacsdir/bin/doom $out/bin/doom --add-flags "--emacsdir $out/share/emacsdir --doomdir $out/share/doomdir"
-                   makeWrapper ${out}/share/emacsdir/bin/doom $out/bin/doomemacs --add-flags "--emacsdir $out/share/emacsdir --doomdir $out/share/doomdir run"
-                '';               
+                   mkdir -p $out/${emacsdir} $out/${doomdir}
+                   cp -r $src/${emacsdir} $out/${emacsdir}/
+                   find $out/${emacsdir} -type d | xargs -n1 chmod 774
+                   echo "Copy doomdir from doom src  to $out/${doomdir}/"
+                   cp -r ${self}/${doomdir}/* $out/${doomdir}
+                   makeWrapper $out/share/emacsdir/bin/doom $out/bin/doom --add-flags
+"--emacsdir $out/${emacsdir} --doomdir $out/${doomdir}"
+                   makeWrapper $out/${emacsdir}/bin/doom $out/bin/doomemacs --add-flags "--emacsdir $out/${emacsdir} --doomdir $out/${doomdir} run"
+                '';
               };
-              
-            }
-            
+            };
+
             ###################################################################
             #                       development shell                         #
             ###################################################################
             devShells.default =
               mkShell
                 {
-                  nativeBuildInputs = with pkgs; [
+                  nativeBuildInputs = (with pkgs; [
                     emacs29
                     git
                     (ripgrep.override {withPCRE2 = true;})
-                  ];
+                    fzf
+                    curl
+                  ]);
+                  # buildInputs = [
+                  #   inputs.doomemacssrc
+                  # ];
+
+                  EMACSDIR="./emacsdir";
+                  DOOMDIR="./.doom.d";
+
+                  shellHook = ''
+                    export PATH=$PATH:$EMACSDIR/bin
+                    echo "$EMACSDIR - $DOOMDIR"
+                  '';
                 };
           }
       );
