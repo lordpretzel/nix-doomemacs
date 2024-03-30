@@ -31,9 +31,13 @@
                 git
                 gnumake
                 eza
+                glibcLocales
+                nerdfonts
+                btop
               ];
 
               shellHook = ''
+        unset LC_ALL
         EMACS=${pkgs.emacs29}/bin/emacs
         source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
         GIT_PS1_SHOWDIRTYSTATE=true

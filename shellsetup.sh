@@ -31,7 +31,7 @@ export LANG=en_US.UTF-8
 if [[ "$OSTYPE" != "linux-gnu" ]]; then
     export LC_ALL=en_US.UTF-8
 else
-    export LC_ALL=C
+    unset LC_ALL
 fi
 if
     [ -x "$(command -v exa)" ]; then
