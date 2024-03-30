@@ -20,20 +20,31 @@
           #   doomPrivateDir = ./.doom.d;
           # };
 
+          doomemacsdir = "doomemacsdir";
+
+          dependencies = with pkgs; [
+                emacs29
+                fzf
+                gnugrep
+                neofetch
+                git
+                gnumake
+                eza
+                glibcLocales
+                nerdfonts
+                btop
+          ];
+
           # Utility to run a script easily in the flakes app
           simple_script = name: add_deps: text: let
             exec = pkgs.writeShellApplication {
               inherit name text;
-              runtimeInputs = with pkgs; [
-                mypython
-              ] ++ add_deps;
+              runtimeInputs = dependencies ++ add_deps;
             };
           in {
             type = "app";
             program = "${exec}/bin/${name}";
           };
-
-          doomemacsdir = "doomemacsdir";
         in
           {
             apps = {
@@ -50,18 +61,7 @@
             };
 
             devShells.default = pkgs.mkShell {
-              buildInputs = with pkgs; [
-                emacs29
-                fzf
-                gnugrep
-                neofetch
-                git
-                gnumake
-                eza
-                glibcLocales
-                nerdfonts
-                btop
-              ];
+              buildInputs = dependencies;
 
               shellHook = ''
         unset LC_ALL
