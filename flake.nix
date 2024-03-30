@@ -18,12 +18,16 @@
     devShells.${system}.default = pkgs.mkShell {
       buildInputs = [
         doom-emacs
-        pkgs.fzf
-        pkgs.gnugrep
-      ];
+      ] ++ (with pkgs; [
+        fzf
+        gnugrep
+        neofetch
+        git
+        gnumake
+      ]);
 
       shellHook = ''
-        source ./ shellsetup.sh
+        source ${self}/shellsetup.sh
       '';
     };
   };
