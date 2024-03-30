@@ -35,6 +35,7 @@
         export GIT_PS1_SHOWDIRTYSTATE=true
         export GIT_PS1_SHOWUNTRACKEDFILES=true
         export GIT_DISCOVERY_ACROSS_FILESYSTEM=true
+        PS1='\[\033[01;32m\]\u@\h\[\033[00m\]\[\033[01;31m\]$(__arch_prompt)\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(__git_ps1 " (%s)")\[\033[00m\] \n\[\033[01;31m\]$(__shell_nest_level)\[\033[00m\]\[\033[01;33m\]${?}\[\033[00m\]\$'
       '';
             };
           }
