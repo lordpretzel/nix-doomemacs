@@ -81,6 +81,22 @@ else
         source $HOME/scripts/shell-scripts/git-completion.sh
     fi
 fi
+
+function __shell_nest_level() {
+    LEVEL=`expr $SHLVL - 1`
+    if [ "${LEVEL}" == "0" ]; then
+        printf ""
+    else
+        printf "[+${LEVEL}] "
+    fi
+    if [ "X${IN_NIX_SHELL}" != "X" ]; then
+        printf "[nix-shell] "
+    fi
+}
+
+export -f __shell_nest_level
+
+
 if [ "$HAVE_GIT_PROMPT" == "1" ]; then
     PS1='\[\033[01;32m\]\u@\h\[\033[00m\]\[\033[01;31m\]$(__arch_prompt)\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(__git_ps1 " (%s)")\[\033[00m\] \n\[\033[01;31m\]$(__shell_nest_level)\[\033[00m\]\[\033[01;33m\]${?}\[\033[00m\]\$'
 else
