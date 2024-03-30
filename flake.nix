@@ -13,20 +13,19 @@
         let
           pkgs = import nixpkgs { inherit system; };
           doom-emacs = nix-doom-emacs.packages.${system}.default.override {
-            doomPrivateDir = "${self}/.doom.d";
+            doomPrivateDir = ./.doom.d;
           };
         in
           {
             devShells.default = pkgs.mkShell {
               buildInputs = [
                 doom-emacs
-              ] ++ (with pkgs; [
-                fzf
-                gnugrep
-                neofetch
-                git
-                gnumake
-              ]);
+                pkgs.fzf
+                pkgs.gnugrep
+                pkgs.neofetch
+                pkgs.git
+                pkgs.gnumake
+              ];
 
               shellHook = ''
         source ${self}/shellsetup.sh
