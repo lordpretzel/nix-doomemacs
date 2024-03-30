@@ -19,9 +19,36 @@
           # doom-emacs = nix-doom-emacs.packages.${system}.default.override {
           #   doomPrivateDir = ./.doom.d;
           # };
+
+          # Utility to run a script easily in the flakes app
+          simple_script = name: add_deps: text: let
+            exec = pkgs.writeShellApplication {
+              inherit name text;
+              runtimeInputs = with pkgs; [
+                mypython
+              ] ++ add_deps;
+            };
+          in {
+            type = "app";
+            program = "${exec}/bin/${name}";
+          };
+
           doomemacsdir = "doomemacsdir";
         in
           {
+            apps = {
+              setup-doom = simple_script "setup-doom" [] ''
+              if [ ! -d ~/doomemacsdir ]; then
+                 cp -r ${doom-emacs}/ ~/${doomemacsdir}/
+                 find ~/${doomemacsdir} -type d | xargs -n1 chmod 755
+                 find ~/${doomemacsdir} -type f | xargs -n1 chmod +w
+                 find ~/.doom.d -type f | xargs -n1 chmod +w
+                 export PATH=~/${doomemacsdir}/bin:$PATH
+                 ~/${doomemacsdir}/bin/doom install --emacsdir ~/${doomemacsdir}
+              fi
+              '';
+            };
+
             devShells.default = pkgs.mkShell {
               buildInputs = with pkgs; [
                 emacs29
