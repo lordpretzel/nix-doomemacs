@@ -25,6 +25,7 @@
                 pkgs.neofetch
                 pkgs.git
                 pkgs.gnumake
+                pkgs.eza
               ];
 
               shellHook = ''
