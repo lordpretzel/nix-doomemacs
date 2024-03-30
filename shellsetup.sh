@@ -96,6 +96,8 @@ function __shell_nest_level() {
 
 export -f __shell_nest_level
 
+PS1='\[\033[01;32m\]\u@\h\[\033[00m\]\[\033[01;31m\]$(__arch_prompt)\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(__git_ps1 " (%s)")\[\033[00m\] \n\[\033[01;31m\]$(__shell_nest_level)\[\033[00m\]\[\033[01;33m\]${?}\[\033[00m\]\$'
+
 if [ "$MYOS" != "linux" ]; then
     export CLICOLOR=1 #cons25
     export LSCOLORS='ExGxFxdxCxDxDxBxBxExEx'

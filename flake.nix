@@ -30,9 +30,9 @@
 
               shellHook = ''
         source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
-        export GIT_PS1_SHOWDIRTYSTATE=true
-        export GIT_PS1_SHOWUNTRACKEDFILES=true
-        export GIT_DISCOVERY_ACROSS_FILESYSTEM=true
+        GIT_PS1_SHOWDIRTYSTATE=true
+        GIT_PS1_SHOWUNTRACKEDFILES=true
+        GIT_DISCOVERY_ACROSS_FILESYSTEM=true
         source ${self}/shellsetup.sh
         source ${pkgs.fzf}/share/fzf/key-bindings.bash
         '';
