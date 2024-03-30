@@ -41,15 +41,8 @@
         GIT_DISCOVERY_ACROSS_FILESYSTEM=true
         source ${self}/shellsetup.sh
         source ${pkgs.fzf}/share/fzf/key-bindings.bash
-        if [ ! -f ~/doomemacsdir ]; then
-           cp -r ${doom-emacs}/ ~/${doomemacsdir}/
-           find ~/${doomemacsdir} -type d | xargs -n1 chmod 755
-           find ~/${doomemacsdir} -type f | xargs -n1 chmod +w
-           cp -r ${self}/.doom.d/ ~/.doom.d
-           find ~/.doom.d -type f | xargs -n1 chmod +w
-	   export PATH=~/${doomemacsdir}/bin:$PATH
-           ~/${doomemacsdir}/bin/doom install --emacsdir ~/${doomemacsdir}
-        fi
+	if [ ! -d ~/doomemacsdir ]; then cp -r ${self}/.doom.d/ ~/.doom.d; fi
+	${self}/setup-doom.sh
         export PATH=${doomemacsdir}/bin:$PATH
         alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
         '';
