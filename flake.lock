@@ -3,6 +3,22 @@
     "doom-emacs": {
       "flake": false,
       "locked": {
+        "lastModified": 1711770073,
+        "narHash": "sha256-RD+oSCuBM5ZK29Ot1xed4eE9avtAuN/n5M2HtXkYeZY=",
+        "owner": "doomemacs",
+        "repo": "doomemacs",
+        "rev": "5f5a163c49207a7083ab1ecc9e78d268fd6600b8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "doomemacs",
+        "repo": "doomemacs",
+        "type": "github"
+      }
+    },
+    "doom-emacs_2": {
+      "flake": false,
+      "locked": {
         "lastModified": 1662497747,
         "narHash": "sha256-4n7E1fqda7cn5/F2jTkOnKw1juG6XMS/FI9gqODL3aU=",
         "owner": "doomemacs",
@@ -217,7 +233,7 @@
     },
     "nix-doom-emacs": {
       "inputs": {
-        "doom-emacs": "doom-emacs",
+        "doom-emacs": "doom-emacs_2",
         "doom-snippets": "doom-snippets",
         "emacs-overlay": "emacs-overlay",
         "emacs-so-long": "emacs-so-long",
@@ -418,6 +434,7 @@
     },
     "root": {
       "inputs": {
+        "doom-emacs": "doom-emacs",
         "flake-utils": "flake-utils",
         "nix-doom-emacs": "nix-doom-emacs",
         "nixpkgs": "nixpkgs_2"

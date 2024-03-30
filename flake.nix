@@ -44,12 +44,14 @@
         if [ ! -f ~/doomemacsdir ]; then
            cp -r ${doom-emacs}/ ~/${doomemacsdir}/
            find ~/${doomemacsdir} -type d | xargs -n1 chmod 755
-           cp -r ${self}/.doom.d/ ~/.doom.d/
-           export PATH=~/${doomemacsdir}/bin:$PATH
+           find ~/${doomemacsdir} -type f | xargs -n1 chmod +w
+           cp -r ${self}/.doom.d/ ~/.doom.d
+           find ~/.doom.d -type f | xargs -n1 chmod +w
+	   export PATH=~/${doomemacsdir}/bin:$PATH
            ~/${doomemacsdir}/bin/doom install --emacsdir ~/${doomemacsdir}
         fi
         export PATH=${doomemacsdir}/bin:$PATH
-        alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory "$HOME/${doomemacsdir}"
+        alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
         '';
             };
           }
