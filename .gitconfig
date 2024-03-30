@@ -1,0 +1,52 @@
+[user]
+	name = Boris Glavic
+	email = lordpretzel@gmail.com
+[mergetool "keepremote"]
+	cmd = /bin/cp -v \"$REMOTE\" \"$MERGED\"
+	trustExitCode = true
+[mergetool "keeplocal"]
+	trustExitCode = true
+	cmd = /bin/cp -v \"$LOCAL\" \"$MERGED\"
+[mergetool "word"]
+	textconv = strings
+[color]
+	ui = true
+[color "diff-highlight"]
+	oldNormal = red bold
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
+[alias]
+	a = add
+	co = checkout
+	f = fetch
+	fa = fetch --all
+	mt = mergetool -y -t
+	me = mergetool --tool=emerge -y
+	df = difftool --tool=ediff
+	dt = difftool -y -t
+	dpdf = difftool --tool=pdf -y
+	wdiff = diff --color-words
+	pl = pull
+	pla = pull --all
+	cm = commit -am
+	s = status -s
+	sp = status --porcelain
+	sv = status -v
+	ss = status --column -u no
+	pu = push
+	pa = push --all
+	pt = push --tag
+	b = branch
+	bd = branch --delete
+	r = remote
+	ra = remote add
+	rv = remote -v
+	l = log --pretty=format:'%Cgreen%h %Cred(%an)%Cblue[%ad] %Creset%s' --decorate --date=local
+	ld = log --pretty=format:'%C(red)**********************************************************%n%Cgreen%h %Cred(%an)%Cblue[%ad] %Creset%s%n%Cred**********************************************************%n' -p --decorate --date=local --color-words
+	lg = log --graph --decorate --all
+	ls = log --stat
+	lgs = log --graph --pretty=format:'%Cgreen%h %Cred(%an)%Cblue[%ad] %Creset%s' --all --decorate --date=local
+	si = submodule update --init --recursive
+	sc = submodule foreach git checkout
+	sur = submodule update --recursive --remote
