@@ -49,14 +49,14 @@
           {
             apps = {
               setup-doom = simple_script "setup-doom" [] ''
-              if [ ! -d ~/doomemacsdir ]; then
-                 cp -r ${doom-emacs}/ ~/${doomemacsdir}/
-                 find ~/${doomemacsdir} -type d | xargs -n1 chmod 755
-                 find ~/${doomemacsdir} -type f | xargs -n1 chmod +w
-                 find ~/.doom.d -type f | xargs -n1 chmod +w
+                 export EMACS=${pkgs.emacs29}/bin/emacs
+                 if [ ! -d ~/${doomemacsdir} ]; then
+                    cp -r ${doom-emacs}/ ~/${doomemacsdir}/
+                 fi
+                 find ~/${doomemacsdir} | xargs -n1 chmod +w
+                 #find ~/.doom.d | xargs -n1 chmod +w
                  export PATH=~/${doomemacsdir}/bin:$PATH
                  ~/${doomemacsdir}/bin/doom install --emacsdir ~/${doomemacsdir}
-              fi
               '';
             };
 
@@ -74,7 +74,6 @@
         source ${self}/shellsetup.sh
         source ${pkgs.fzf}/share/fzf/key-bindings.bash
 	if [ ! -d ~/doomemacsdir ]; then cp -r ${self}/.doom.d/ ~/.doom.d; fi
-	${self}/setup-doom.sh
         export PATH=${doomemacsdir}/bin:$PATH
         alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
         '';
