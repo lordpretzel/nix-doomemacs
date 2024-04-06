@@ -53,7 +53,7 @@
                  if [ ! -d ~/${doomemacsdir} ]; then
                     cp -r ${doom-emacs}/ ~/${doomemacsdir}/
                  fi
-                 find ~/${doomemacsdir} | xargs -n1 chmod +w
+                 #find ~/${doomemacsdir} | xargs -n1 chmod +w
                  #find ~/.doom.d | xargs -n1 chmod +w
                  export PATH=~/${doomemacsdir}/bin:$PATH
                  ~/${doomemacsdir}/bin/doom install --emacsdir ~/${doomemacsdir}
