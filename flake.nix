@@ -23,16 +23,16 @@
           doomemacsdir = "doomemacsdir";
 
           dependencies = with pkgs; [
-                emacs29
-                fzf
-                gnugrep
-                neofetch
-                git
-                gnumake
-                eza
-                glibcLocales
-                nerdfonts
-                btop
+            emacs29
+            fzf
+            gnugrep
+            neofetch
+            git
+            gnumake
+            eza
+            glibcLocales
+            nerdfonts
+            btop
           ];
 
           # Utility to run a script easily in the flakes app
