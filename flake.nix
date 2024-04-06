@@ -72,10 +72,7 @@
           '';
 
           boris-shell = simple_script "boris-shell.sh" [] ''
-        unset LC_ALL
-        export EMACS=${pkgs.emacs29}/bin/emacs
-        export PATH=${doomemacsdir}/bin:$PATH
-        alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory ~/${doomemacsdir}"
+            nix develop github:lordpretzel/nix-doomemacs
           '';
 
 #        source "$out/share/key-bindings.bash"
@@ -83,15 +80,8 @@
         in with pkgs;
           {
             apps = {
-              setup-doom = simple_script "setup-doom-sh" [] ''
-                 export EMACS=${pkgs.emacs29}/bin/emacs
-                 if [ ! -d ~/${doomemacsdir} ]; then
-                    cp -r ${doom-emacs}/ ~/${doomemacsdir}
-                 fi
-                 #find ~/${doomemacsdir} | xargs -n1 chmod +w
-                 #find ~/.doom.d | xargs -n1 chmod +w
-                 export PATH=~/${doomemacsdir}/bin:$PATH
-                 ~/${doomemacsdir}/bin/doom install --emacsdir ~/${doomemacsdir} --debug --env --no-config --force
+              default = simple_script "boris-shell" [] ''
+                 nix develop github:lordpretzel/nix-doomemacs
               '';
             };
 
@@ -109,7 +99,7 @@
                    mkdir -p $out/share/
                    cp $src/shellsetup.sh $out/share/shellsetup.sh
                    cp $src/.gitconfig $out/share/.gitconfig
-                   cp ${boris-shell.program} $out/bin/boris-shell.sh
+                   cp ${boris-shell.program} $out/bin/boris-shell
                    cp ${rundoom.program} $out/bin/rundoom.sh
                    cp ${setup-doom.program} $out/bin/setup-doom.sh
                    cp ${pkgs.fzf}/share/fzf/key-bindings.bash $out/share/key-bindings.bash
