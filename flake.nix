@@ -133,7 +133,7 @@
         GIT_DISCOVERY_ACROSS_FILESYSTEM=true
         source ${self}/shellsetup.sh
         source ${pkgs.fzf}/share/fzf/key-bindings.bash
-        export PATH=${doomemacsdir}/bin:$PATH
+        export PATH=~/${doomemacsdir}/bin:$PATH
         alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
         '';
             };
