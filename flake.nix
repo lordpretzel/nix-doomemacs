@@ -21,6 +21,7 @@
           # };
 
           doomemacsdir = "doomemacsdir";
+          doomconfigdir = ".doomconfig";
 
           dependencies = with pkgs; [
             emacs29
@@ -63,12 +64,12 @@
           setup-doom = simple_script "setup-doom.sh" [] ''
              if [ ! -d ~/${doomemacsdir} ]; then
                  cp -r ${doom-emacs}/ ~/${doomemacsdir}/
-                 find ~/${doomemacsdir} -print0 -type d | xargs -n1 chmod 755
-                 find ~/.doom.d -type f -print0 | xargs -n1 chmod +w
-                 export PATH=~/${doomemacsdir}/bin:$PATH
-                 ~/${doomemacsdir}/bin/doom install --emacsdir ~/${doomemacsdir} --no-config --env --force
-                 if [ ! -d ~/.doom.d ]; then cp -r ${self}/.doom.d/ ~/.doom.d; fi
              fi
+             if [ ! -d ~/.doom.d ]; then cp -r ${self}/.doom.d/ ~/${doomconfigdir}; fi
+             find ~/${doomemacsdir} -type d -exec chmod 755 {} ''\\''\;
+             find ~/${doomconfigdir} -type f -exec chmod +w {} ''\\''\;
+             export PATH=~/${doomemacsdir}/bin:$PATH
+             ~/${doomemacsdir}/bin/doom install --emacsdir ~/${doomemacsdir} --doomdir ~/${doomconfigdir} --no-config --env --force
           '';
 
           boris-shell = simple_script "boris-shell.sh" [] ''
