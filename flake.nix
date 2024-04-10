@@ -81,7 +81,7 @@
           '';
 
           boris-shell = simple_script "boris-shell.sh" [] ''
-            nix develop github:lordpretzel/nix-doomemacs
+            NIX_BUILD_SHELL=${pkgs.bashInteractive}/bin/bash  nix develop github:lordpretzel/nix-doomemacs
           '';
 
         in with pkgs;
@@ -120,6 +120,7 @@
               buildInputs = dependencies;
 
               NIX_BUILD_SHELL = "${pkgs.bashInteractive}/bin/bash";
+              shell = "${pkgs.bashInteractive}/bin/bash";
 
               shellHook = ''
         unset LC_ALL
