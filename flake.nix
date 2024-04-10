@@ -138,11 +138,10 @@
                    cp $src/shellsetup.sh $out/share/shellsetup.sh
                    cp $src/.gitconfig $out/share/.gitconfig
                    cp ${boris-shell.program} $out/bin/boris-shell
-                   cp ${rundoom.program} $out/bin/rundoom.sh
-                   cp ${setup-doom.program} $out/bin/setup-doom.sh
+                   cp ${rundoom.program} $out/bin/rundoom
+                   cp ${setup-doom.program} $out/bin/setup-doom
+                   cp ${pkgs.git}/share/bash-completion/completions/git-prompt.sh $out/share/git-prompt.sh
                    cp ${pkgs.fzf}/share/fzf/key-bindings.bash $out/share/key-bindings.bash
-                   makeWrapper $out/bin/setup-doom.sh $out/bin/setup-doom
-                   makeWrapper $out/bin/rundoom.sh $out/bin/boris-doom
                 '';
               };
             };
