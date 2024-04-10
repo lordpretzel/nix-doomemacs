@@ -117,6 +117,8 @@
         export GIT_CONFIG=${self}/.gitconfig
         export EMACS=${pkgs.emacs29}/bin/emacs
         source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
+        eval "$(${direnv}/bin/direnv hook bash)"
+        source ${nix-direnv}/share/nix-direnv/direnvrc
         GIT_PS1_SHOWDIRTYSTATE=true
         GIT_PS1_SHOWUNTRACKEDFILES=true
         GIT_DISCOVERY_ACROSS_FILESYSTEM=true
