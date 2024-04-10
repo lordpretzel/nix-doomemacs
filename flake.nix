@@ -62,14 +62,20 @@
           '';
 
           setup-doom = simple_script "setup-doom.sh" [] ''
+             export DOOMDIR=~/${doomconfigdir}
+             export EMACS=${pkgs.emacs29}/bin/emacs
+             export PATH=~/${doomemacsdir}/bin:$PATH
              if [ ! -d ~/${doomemacsdir} ]; then
+                 mkdir -p ~/${doomemacsdir}
                  cp -r ${doom-emacs}/ ~/${doomemacsdir}/
              fi
-             if [ ! -d ~/.doom.d ]; then cp -r ${self}/.doom.d/ ~/${doomconfigdir}; fi
+             if [ ! -d ~/${doomconfigdir} ]; then
+                 mkdir -p ~/${doomconfigdir}
+                 cp -r ${self}/.doom.d/ ~/${doomconfigdir}
+             fi
              find ~/${doomemacsdir} -type d -exec chmod 755 {} ''\\''\;
              find ~/${doomconfigdir} -type f -exec chmod +w {} ''\\''\;
-             export PATH=~/${doomemacsdir}/bin:$PATH
-             ~/${doomemacsdir}/bin/doom install --emacsdir ~/${doomemacsdir} --doomdir ~/${doomconfigdir} --no-config --env --force
+             ~/${doomemacsdir}/bin/doom --emacsdir ~/${doomemacsdir} --doomdir ~/${doomconfigdir} install --no-config --env --force --debug
           '';
 
           boris-shell = simple_script "boris-shell.sh" [] ''
@@ -117,6 +123,7 @@
         unset LC_ALL
         export GIT_CONFIG=${self}/.gitconfig
         export EMACS=${pkgs.emacs29}/bin/emacs
+        export DOOMDIR=~/${doomconfigdir}
         source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
         eval "$(${direnv}/bin/direnv hook bash)"
         source ${nix-direnv}/share/nix-direnv/direnvrc
@@ -125,8 +132,6 @@
         GIT_DISCOVERY_ACROSS_FILESYSTEM=true
         source ${self}/shellsetup.sh
         source ${pkgs.fzf}/share/fzf/key-bindings.bash
-        if [ ! -d ~/.doom.d ]; then cp -r ${self}/.doom.d/ ~/.doom.d; fi
-        if [ ! -d ~/${doomemacsdir} ]; then cp -r ${doom-emacs}/ ~/${doomemacsdir}; fi
         export PATH=${doomemacsdir}/bin:$PATH
         alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
         '';
