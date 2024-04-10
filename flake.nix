@@ -26,6 +26,7 @@
           dependencies = with pkgs; [
             emacs29
             bat
+            bashInteractive
             curl
             fzf
             gnugrep
