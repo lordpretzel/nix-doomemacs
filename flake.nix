@@ -66,7 +66,7 @@
              export DOOMDIR=~/${doomconfigdir}
              export EMACS=${pkgs.emacs29}/bin/emacs
              export PATH=~/${doomemacsdir}/bin:$PATH
-             export SHELL=${pkgs.bashInteractive}/bin/bash:$PATH
+             export SHELL=${pkgs.bashInteractive}/bin/bash
              if [ ! -d ~/${doomemacsdir} ]; then
                  mkdir -p ~/${doomemacsdir}
                  cp -r ${doom-emacs}/ ~/${doomemacsdir}/
@@ -88,7 +88,7 @@
           {
             apps = {
               default = simple_script "boris-shell" [] ''
-                 nix develop github:lordpretzel/nix-doomemacs
+                 NIX_BUILD_SHELL=${pkgs.bashInteractive}/bin/bash nix develop github:lordpretzel/nix-doomemacs
               '';
             };
 
@@ -118,6 +118,8 @@
 
             devShells.default = pkgs.mkShell {
               buildInputs = dependencies;
+
+              NIX_BUILD_SHELL = "${pkgs.bashInteractive}/bin/bash";
 
               shellHook = ''
         unset LC_ALL
