@@ -66,6 +66,7 @@
              export DOOMDIR=~/${doomconfigdir}
              export EMACS=${pkgs.emacs29}/bin/emacs
              export PATH=~/${doomemacsdir}/bin:$PATH
+             export SHELL=${pkgs.bashInteractive}/bin/bash:$PATH
              if [ ! -d ~/${doomemacsdir} ]; then
                  mkdir -p ~/${doomemacsdir}
                  cp -r ${doom-emacs}/ ~/${doomemacsdir}/
@@ -83,8 +84,6 @@
             nix develop github:lordpretzel/nix-doomemacs
           '';
 
-#        source "$out/share/key-bindings.bash"
-#        source "$out/share/shellsetup.sh"
         in with pkgs;
           {
             apps = {
@@ -125,6 +124,7 @@
         export GIT_CONFIG=${self}/.gitconfig
         export EMACS=${pkgs.emacs29}/bin/emacs
         export DOOMDIR=~/${doomconfigdir}
+        export SHELL=${pkgs.bashInteractive}/bin/bash
         source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
         eval "$(${direnv}/bin/direnv hook bash)"
         source ${nix-direnv}/share/nix-direnv/direnvrc

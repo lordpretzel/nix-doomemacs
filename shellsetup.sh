@@ -2,10 +2,13 @@ if [[ "$OSTYPE" == "linux-gnu" ]]; then
 	MYOS="linux"
 	if [ -f /etc/proc ] && [ "$(cat /etc/proc | grep Ubuntu)" != "" ]; then
 	    LINUX_FLAVOR="ubuntu"
-	elif [[ "$(lsb_release -i -s | grep NixOS)" != "" ]]; then
-	    LINUX_FLAVOR="nixos"
-	fi
-	export LINUX_FLAVOR
+        fi
+        if [ -x "$(command -v lsb_release)" ]; then
+	    if [[ "$(lsb_release -i -s | grep NixOS)" != "" ]]; then
+	        LINUX_FLAVOR="nixos"
+	    fi
+        fi
+        export LINUX_FLAVOR
 elif [[ "$OSTYPE" == "darwin"* ]]; then
 	MYOS="osx"
 	if [[ "$(arch)" == "arm64" ]]; then
@@ -33,8 +36,7 @@ if [[ "$OSTYPE" != "linux-gnu" ]]; then
 else
     unset LC_ALL
 fi
-if
-    [ -x "$(command -v exa)" ]; then
+if [ -x "$(command -v exa)" ]; then
     alias l="exa -a --group-directories-first --color=always"
     alias ll="exa -la --group-directories-first --color=always"
     alias lt="exa -aT --group-directories-first --color=always"
