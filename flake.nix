@@ -57,12 +57,42 @@
             program = "${exec}/bin/${name}";
           };
 
+          script_with_correct_bash = name: add_deps: text:
+            let
+              runtimeInputs = dependencies ++ add_deps;
+
+              path = pkgs.lib.makeBinPath runtimeInputs;
+              # path = "test";
+              thepath = ''
+                       export PATH="${path}:$PATH"
+              '';
+
+              new_text = ''
+                  #!${pkgs.bashInteractive}/bin/bash
+
+                  ${thepath}
+                  ${text}
+              '';
+            in
+              pkgs.writeScriptBin name new_text;
+
+          app_with_correct_bash = name: add_deps: text: let
+            exec = script_with_correct_bash name add_deps text;
+          in {
+            type = "app";
+            program = "${exec}/bin/${name}";
+          };
+
           # script to use in package to setup and run doom
-          rundoom = simple_script "run-doom.sh" [] ''
+          rundoom = app_with_correct_bash "run-doom.sh" [] ''
              ${pkgs.emacs29}/bin/emacs --init-directory "$HOME/${doomemacsdir}"
           '';
 
-          setup-doom = simple_script "setup-doom.sh" [] ''
+          test_script = app_with_correct_bash "mymy" [] ''
+              echo hello ass
+          '';
+
+          setup-doom = app_with_correct_bash "setup-doom.sh" [] ''
              export DOOMDIR=~/${doomconfigdir}
              export EMACS=${pkgs.emacs29}/bin/emacs
              export PATH=~/${doomemacsdir}/bin:$PATH
@@ -80,14 +110,14 @@
              ~/${doomemacsdir}/bin/doom --emacsdir ~/${doomemacsdir} --doomdir ~/${doomconfigdir} install --no-config --env --force --debug
           '';
 
-          boris-shell = simple_script "boris-shell.sh" [] ''
+          boris-shell = app_with_correct_bash "boris-shell.sh" [] ''
             NIX_BUILD_SHELL=${pkgs.bashInteractive}/bin/bash  nix develop github:lordpretzel/nix-doomemacs
           '';
 
         in with pkgs;
           {
             apps = {
-              default = simple_script "boris-shell" [] ''
+              default = app_with_correct_bash "boris-shell" [] ''
                  NIX_BUILD_SHELL=${pkgs.bashInteractive}/bin/bash nix develop github:lordpretzel/nix-doomemacs
               '';
             };
@@ -104,6 +134,7 @@
                 installPhase = ''
                    mkdir -p $out/bin/
                    mkdir -p $out/share/
+                   cp ${test_script.program} $out/share/testt
                    cp $src/shellsetup.sh $out/share/shellsetup.sh
                    cp $src/.gitconfig $out/share/.gitconfig
                    cp ${boris-shell.program} $out/bin/boris-shell
