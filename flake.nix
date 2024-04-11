@@ -107,7 +107,14 @@
              ~/${doomemacsdir}/bin/doom --emacsdir ~/${doomemacsdir} --doomdir ~/${doomconfigdir} install --no-config --env --force --debug
           '';
 
-          bashrc = pkgs.writeTextFile {
+          bashrc =
+            let
+              path = pkgs.lib.makeBinPath dependencies;
+              thepath = ''
+                       export PATH="${path}:$PATH"
+              '';
+            in
+            pkgs.writeTextFile {
             name = "share/bashrc";
             text = ''
         unset LC_ALL
@@ -124,6 +131,7 @@
         source @@out@@/share/shellsetup.sh
         source ${pkgs.fzf}/share/fzf/key-bindings.bash
         export PATH=~/${doomemacsdir}/bin:$PATH
+        ${thepath}
         alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
         '';
           };
