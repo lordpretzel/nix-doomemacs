@@ -118,7 +118,7 @@
             name = "share/bashrc";
             text = ''
             if [ -f ~/.bashrc ]; then
-              . ~/bashrc
+              . ~/.bashrc
             fi
             unset LC_ALL
             export GIT_CONFIG=@@out@@/share/.gitconfig
