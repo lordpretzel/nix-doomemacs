@@ -117,22 +117,25 @@
             pkgs.writeTextFile {
             name = "share/bashrc";
             text = ''
-        unset LC_ALL
-        export GIT_CONFIG=@@out@@/share/.gitconfig
-        export EMACS=${pkgs.emacs29}/bin/emacs
-        export DOOMDIR=~/${doomconfigdir}
-        export SHELL=${pkgs.bashInteractive}/bin/bash
-        source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
-        eval "$(${pkgs.direnv}/bin/direnv hook bash)"
-        source ${pkgs.nix-direnv}/share/nix-direnv/direnvrc
-        GIT_PS1_SHOWDIRTYSTATE=true
-        GIT_PS1_SHOWUNTRACKEDFILES=true
-        GIT_DISCOVERY_ACROSS_FILESYSTEM=true
-        source @@out@@/share/shellsetup.sh
-        source ${pkgs.fzf}/share/fzf/key-bindings.bash
-        export PATH=~/${doomemacsdir}/bin:$PATH
-        ${thepath}
-        alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
+            if [ -f ~/.bashrc ]; then
+              . ~/bashrc
+            fi
+            unset LC_ALL
+            export GIT_CONFIG=@@out@@/share/.gitconfig
+            export EMACS=${pkgs.emacs29}/bin/emacs
+            export DOOMDIR=~/${doomconfigdir}
+            export SHELL=${pkgs.bashInteractive}/bin/bash
+            source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
+            eval "$(${pkgs.direnv}/bin/direnv hook bash)"
+            source ${pkgs.nix-direnv}/share/nix-direnv/direnvrc
+            GIT_PS1_SHOWDIRTYSTATE=true
+            GIT_PS1_SHOWUNTRACKEDFILES=true
+            GIT_DISCOVERY_ACROSS_FILESYSTEM=true
+            source @@out@@/share/shellsetup.sh
+            source ${pkgs.fzf}/share/fzf/key-bindings.bash
+            export PATH=~/${doomemacsdir}/bin:$PATH
+            ${thepath}
+            alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
         '';
           };
 
