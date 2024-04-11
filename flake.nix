@@ -88,9 +88,6 @@
              ${pkgs.emacs29}/bin/emacs --init-directory "$HOME/${doomemacsdir}"
           '';
 
-          test_script = app_with_correct_bash "mymy" [] ''
-              echo hello ass
-          '';
 
           setup-doom = app_with_correct_bash "setup-doom.sh" [] ''
              export DOOMDIR=~/${doomconfigdir}
@@ -110,10 +107,31 @@
              ~/${doomemacsdir}/bin/doom --emacsdir ~/${doomemacsdir} --doomdir ~/${doomconfigdir} install --no-config --env --force --debug
           '';
 
-          boris-shell = app_with_correct_bash "boris-shell.sh" [] ''
-            NIX_BUILD_SHELL=${pkgs.bashInteractive}/bin/bash  nix develop github:lordpretzel/nix-doomemacs
-          '';
+          bashrc = pkgs.writeTextFile {
+            name = "share/bashrc";
+            text = ''
+        unset LC_ALL
+        export GIT_CONFIG=@@out@@/share/.gitconfig
+        export EMACS=${pkgs.emacs29}/bin/emacs
+        export DOOMDIR=~/${doomconfigdir}
+        export SHELL=${pkgs.bashInteractive}/bin/bash
+        source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
+        eval "$(${pkgs.direnv}/bin/direnv hook bash)"
+        source ${pkgs.nix-direnv}/share/nix-direnv/direnvrc
+        GIT_PS1_SHOWDIRTYSTATE=true
+        GIT_PS1_SHOWUNTRACKEDFILES=true
+        GIT_DISCOVERY_ACROSS_FILESYSTEM=true
+        source @@out@@/share/shellsetup.sh
+        source ${pkgs.fzf}/share/fzf/key-bindings.bash
+        export PATH=~/${doomemacsdir}/bin:$PATH
+        alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
+        '';
+          };
 
+          boris-shell = app_with_correct_bash "boris-shell.sh" [] ''
+            bash --rcfile @@out@@/share/bashrc
+          '';
+          #            NIX_BUILD_SHELL=${pkgs.bashInteractive}/bin/bash  nix develop github:lordpretzel/nix-doomemacs
         in with pkgs;
           {
             apps = {
@@ -134,10 +152,12 @@
                 installPhase = ''
                    mkdir -p $out/bin/
                    mkdir -p $out/share/
-                   cp ${test_script.program} $out/share/testt
                    cp $src/shellsetup.sh $out/share/shellsetup.sh
                    cp $src/.gitconfig $out/share/.gitconfig
+                   cp ${bashrc} $out/share/bashrc
+                   substituteInPlace $out/share/bashrc --replace @@out@@ $out
                    cp ${boris-shell.program} $out/bin/boris-shell
+                   substituteInPlace $out/bin/boris-shell --replace @@out@@ $out
                    cp ${rundoom.program} $out/bin/rundoom
                    cp ${setup-doom.program} $out/bin/setup-doom
                    cp ${pkgs.git}/share/bash-completion/completions/git-prompt.sh $out/share/git-prompt.sh
