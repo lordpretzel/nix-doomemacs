@@ -24,11 +24,7 @@
           doomconfigdir = ".doomconfig";
 
           edpfdependencies = with pkgs; [
-            cairo
-            libpng
-            libz
             emacsPackages.pdf-tools
-            poppler_gi
           ];
 
           dependencies = (with pkgs; [
