@@ -23,7 +23,15 @@
           doomemacsdir = "doomemacsdir";
           doomconfigdir = ".doomconfig";
 
-          dependencies = with pkgs; [
+          edpfdependencies = with pkgs; [
+            cairo
+            libpng
+            libz
+            emacsPackages.pdf-tools
+            poppler_gi
+          ];
+
+          dependencies = (with pkgs; [
             emacs29
             bat
             bashInteractive
@@ -44,7 +52,7 @@
             direnv
             nix-direnv
             charasay
-          ];
+          ]) ++ edpfdependencies;
 
           # Utility to run a script easily in the flakes app
           simple_script = name: add_deps: text: let
@@ -104,6 +112,7 @@
              fi
              find ~/${doomemacsdir} -type d -exec chmod 755 {} ''\\''\;
              find ~/${doomconfigdir} -type f -exec chmod +w {} ''\\''\;
+             cp -s $(${pkgs.findutils}/bin/find ${pkgs.emacsPackages.pdf-tools}/ -name epdfinfo) ~/${doomemacsdir}/bin/epdfinfo
              ~/${doomemacsdir}/bin/doom --emacsdir ~/${doomemacsdir} --doomdir ~/${doomconfigdir} install --no-config --env --force --debug
           '';
 
@@ -173,6 +182,7 @@
                    cp ${setup-doom.program} $out/bin/setup-doom
                    cp ${pkgs.git}/share/bash-completion/completions/git-prompt.sh $out/share/git-prompt.sh
                    cp ${pkgs.fzf}/share/fzf/key-bindings.bash $out/share/key-bindings.bash
+                   ln -s $(${pkgs.findutils}/bin/find ${pkgs.emacsPackages.pdf-tools}/ -name epdfinfo) $out/bin/my-epdfinfo
                 '';
               };
             };
