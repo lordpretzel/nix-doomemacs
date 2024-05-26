@@ -47,6 +47,7 @@
             wget
             direnv
             nix-direnv
+            tmux
             charasay
           ]) ++ edpfdependencies;
 
