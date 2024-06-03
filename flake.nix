@@ -16,9 +16,6 @@
       (system:
         let
           pkgs = import nixpkgs { inherit system; };
-          # doom-emacs = nix-doom-emacs.packages.${system}.default.override {
-          #   doomPrivateDir = ./.doom.d;
-          # };
 
           doomemacsdir = "doomemacsdir";
           doomconfigdir = ".doomconfig";
@@ -27,15 +24,22 @@
             emacsPackages.pdf-tools
           ];
 
+          linuxdependencies = with pkgs;
+            (if (lib.strings.hasSuffix "linux" system)
+            then [ iotop ]
+             else []);
+
           dependencies = (with pkgs; [
             emacs29
             bat
             bashInteractive
             curl
             fzf
+            fzf-git-sh
             gnugrep
             neofetch
             git
+            git-extras
             gnumake
             eza
             glibcLocales
@@ -45,11 +49,13 @@
             gnutar
             bzip2
             wget
+            ripgrep
             direnv
             nix-direnv
-            tmux
             charasay
-          ]) ++ edpfdependencies;
+          ])
+          ++ edpfdependencies
+          ++ linuxdependencies;
 
           # Utility to run a script easily in the flakes app
           simple_script = name: add_deps: text: let
@@ -139,6 +145,7 @@
             GIT_DISCOVERY_ACROSS_FILESYSTEM=true
             source @@out@@/share/shellsetup.sh
             source ${pkgs.fzf}/share/fzf/key-bindings.bash
+            source ${pkgs.fzf-git-sh}/share/fzf-git-sh/fzf-git.sh
             export PATH=~/${doomemacsdir}/bin:$PATH
             ${thepath}
             alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
