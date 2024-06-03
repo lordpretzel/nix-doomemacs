@@ -149,6 +149,11 @@
             export PATH=~/${doomemacsdir}/bin:$PATH
             ${thepath}
             alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
+            alias ll="${pkgs.eza}/bin/eza --color=always --icons=always --git --long"
+            alias lt="${pkgs.eza}/bin/eza --color=always --icons=always --git --tree"
+            alias llt="${pkgs.eza}/bin/eza --color=always --icons=always --git --long --tree"
+            alias l="${pkgs.eza}/bin/eza --color=always --icons=always --git"
+            export BAT_THEME=ansi
         '';
           };
 
