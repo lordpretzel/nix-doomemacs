@@ -156,6 +156,7 @@
             alias cat="bat"
             export BAT_THEME=ansi
             fastfetch
+            rich "[b white on red]My nixed shell for development![/]" --print --padding 1 -p -a heavy -c
         '';
           };
 
@@ -221,6 +222,7 @@
         export PATH=~/${doomemacsdir}/bin:$PATH
         alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
         fastfetch
+        rich "[b white on red]My nixed shell for development![/]" --print --padding 1 -p -a heavy -c
         '';
             };
           }
