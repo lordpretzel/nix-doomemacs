@@ -37,7 +37,7 @@
             fzf
             fzf-git-sh
             gnugrep
-            neofetch
+            fastfetch
             git
             git-extras
             gnumake
@@ -52,7 +52,7 @@
             ripgrep
             direnv
             nix-direnv
-            charasay
+            rich-cli
           ])
           ++ edpfdependencies
           ++ linuxdependencies;
@@ -219,6 +219,7 @@
         source ${pkgs.fzf}/share/fzf/key-bindings.bash
         export PATH=~/${doomemacsdir}/bin:$PATH
         alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
+        fastfetch
         '';
             };
           }
