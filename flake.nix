@@ -155,6 +155,7 @@
             alias l="${pkgs.eza}/bin/eza --color=always --icons=always --git"
             alias cat="bat"
             export BAT_THEME=ansi
+            fastfetch
         '';
           };
 
