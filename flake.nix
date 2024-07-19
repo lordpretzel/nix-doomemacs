@@ -36,12 +36,16 @@
             curl
             fzf
             fzf-git-sh
+            gawk
             gnugrep
             fastfetch
             git
             git-extras
             gnumake
             eza
+            jq
+            mg
+            rsync
             glibcLocales
             nerdfonts
             htop
@@ -53,6 +57,14 @@
             direnv
             nix-direnv
             rich-cli
+            tree
+
+            # compression
+            unrar
+            unzip
+            p7zip
+            bzip2
+            xz
           ])
           ++ edpfdependencies
           ++ linuxdependencies;
