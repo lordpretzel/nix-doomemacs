@@ -107,11 +107,11 @@
              export SHELL=${pkgs.bashInteractive}/bin/bash
              if [ ! -d ~/${doomemacsdir} ]; then
                  mkdir -p ~/${doomemacsdir}
-                 cp -r ${doom-emacs}/ ~/${doomemacsdir}/
+                 cp -r ${doom-emacs}/. ~/${doomemacsdir}/
              fi
              if [ ! -d ~/${doomconfigdir} ]; then
                  mkdir -p ~/${doomconfigdir}
-                 cp -r ${self}/.doom.d/ ~/${doomconfigdir}
+                 cp -r ${self}/.doom.d/. ~/${doomconfigdir}
              fi
              find ~/${doomemacsdir} -type d -exec chmod 755 {} ''\\''\;
              find ~/${doomconfigdir} -type f -exec chmod +w {} ''\\''\;
@@ -149,14 +149,18 @@
             export PATH=~/${doomemacsdir}/bin:$PATH
             ${thepath}
             alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
-            alias ll="${pkgs.eza}/bin/eza --color=always --icons=always --git --long"
+            alias ll="${pkgs.eza}/bin/eza --color=always --icons=always --git --long --all"
             alias lt="${pkgs.eza}/bin/eza --color=always --icons=always --git --tree"
             alias llt="${pkgs.eza}/bin/eza --color=always --icons=always --git --long --tree"
-            alias l="${pkgs.eza}/bin/eza --color=always --icons=always --git"
+            alias l="${pkgs.eza}/bin/eza --color=always --icons=always --git --all"
             alias cat="bat"
             export BAT_THEME=ansi
             fastfetch
-            rich "[b white on red]My nixed shell for development![/]" --print --padding 1 -p -a heavy -c
+            rich "[b white on red]My nixed shell for development![/]
+
+[b black on white]rundoom[/]    - run doomemacs
+[b black on white]setup-doom[/] - setup doom (takes a while compiling packages)
+" --print --padding 1 -p -a heavy -c
         '';
           };
 
@@ -222,7 +226,11 @@
         export PATH=~/${doomemacsdir}/bin:$PATH
         alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
         fastfetch
-        rich "[b white on red]My nixed shell for development![/]" --print --padding 1 -p -a heavy -c
+        rich "[b white on red]My nixed shell for development![/]
+
+[b black on white]rundoom[/]    - run doomemacs
+[b black on white]setup-doom[/] - setup doom (takes a while compiling packages)
+" --print --padding 1 -p -a heavy -c
         '';
             };
           }
