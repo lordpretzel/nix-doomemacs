@@ -60,7 +60,6 @@
             tree
 
             # compression
-            unrar
             unzip
             p7zip
             bzip2
