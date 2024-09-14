@@ -149,7 +149,6 @@
               . ~/.bashrc
             fi
             ${locales}
-            unset LC_ALL
             export GIT_CONFIG=@@out@@/share/.gitconfig
             export EMACS=${pkgs.emacs29}/bin/emacs
             export DOOMDIR=~/${doomconfigdir}
@@ -228,7 +227,6 @@
 
               shellHook = ''
         ${locales}
-        unset LC_ALL
         export GIT_CONFIG=${self}/.gitconfig
         export EMACS=${pkgs.emacs29}/bin/emacs
         export DOOMDIR=~/${doomconfigdir}
