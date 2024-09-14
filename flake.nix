@@ -26,8 +26,13 @@
 
           linuxdependencies = with pkgs;
             (if (lib.strings.hasSuffix "linux" system)
-            then [ iotop ]
+            then [ iotop glibcLocales ]
              else []);
+
+          locales = with pkgs;
+            (if (lib.strings.hasSuffix "linux" system)
+             then ''export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"''
+             else "");
 
           dependencies = (with pkgs; [
             emacs29
@@ -46,7 +51,6 @@
             jq
             mg
             rsync
-            glibcLocales
             nerdfonts
             htop
             btop
@@ -58,6 +62,7 @@
             nix-direnv
             rich-cli
             tree
+            lazygit
 
             # compression
             unzip
@@ -143,6 +148,7 @@
             if [ -f ~/.bashrc ]; then
               . ~/.bashrc
             fi
+            ${locales}
             unset LC_ALL
             export GIT_CONFIG=@@out@@/share/.gitconfig
             export EMACS=${pkgs.emacs29}/bin/emacs
@@ -221,11 +227,13 @@
               shell = "${pkgs.bashInteractive}/bin/bash";
 
               shellHook = ''
+        ${locales}
         unset LC_ALL
         export GIT_CONFIG=${self}/.gitconfig
         export EMACS=${pkgs.emacs29}/bin/emacs
         export DOOMDIR=~/${doomconfigdir}
         export SHELL=${pkgs.bashInteractive}/bin/bash
+
         source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
         eval "$(${direnv}/bin/direnv hook bash)"
         source ${nix-direnv}/share/nix-direnv/direnvrc
