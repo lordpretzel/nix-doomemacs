@@ -30,11 +30,13 @@ else
 fi
 export MYOS
 
-export LANG=en_US.UTF-8
-if [[ "$OSTYPE" != "linux-gnu" ]]; then
-    export LC_ALL=en_US.UTF-8
+if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    echo "Set linux locales"
+    #export LC_ALL="en_US.UTF-8/UTF-8"
+    export LANG="en_US.UTF-8/UFT-8"
 else
-    unset LC_ALL
+    export LC_ALL="en_US.UTF-8"
+    export LANG="en_US.UTF-8"
 fi
 if [ -x "$(command -v exa)" ]; then
     alias l="exa -a --group-directories-first --color=always"

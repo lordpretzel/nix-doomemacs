@@ -31,7 +31,15 @@
 
           locales = with pkgs;
             (if (lib.strings.hasSuffix "linux" system)
-             then ''export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"''
+             then ''
+             echo "SET LOCALES: ${glibcLocales}/lib/locale/locale-archive"
+             export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
+             unset LC_ALL
+	         unset LANG
+             LANG="en_US.UTF-8/UTF-8"
+             export LANG="en_US.UTF-8/UTF-8"
+	         #export LC_ALL="en_US.UTF-8/UFT-8"
+             ''
              else "");
 
           dependencies = (with pkgs; [
@@ -89,14 +97,14 @@
               runtimeInputs = dependencies ++ add_deps;
 
               path = pkgs.lib.makeBinPath runtimeInputs;
-              # path = "test";
               thepath = ''
-                       export PATH="${path}:$PATH"
+                  export PATH="${path}:$PATH:~/.nix-profile/bin:/nix/var/nix/profiles/default/bin"
               '';
 
               new_text = ''
                   #!${pkgs.bashInteractive}/bin/bash
 
+                  ${locales}
                   ${thepath}
                   ${text}
               '';
@@ -145,9 +153,7 @@
             pkgs.writeTextFile {
             name = "share/bashrc";
             text = ''
-            if [ -f ~/.bashrc ]; then
-              . ~/.bashrc
-            fi
+            ${thepath}
             ${locales}
             export GIT_CONFIG=@@out@@/share/.gitconfig
             export EMACS=${pkgs.emacs29}/bin/emacs
@@ -163,7 +169,7 @@
             source ${pkgs.fzf}/share/fzf/key-bindings.bash
             source ${pkgs.fzf-git-sh}/share/fzf-git-sh/fzf-git.sh
             export PATH=~/${doomemacsdir}/bin:$PATH
-            ${thepath}
+            export PATH=@@out@@/bin:$PATH
             alias doomemacs="${pkgs.emacs29}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
             alias ll="${pkgs.eza}/bin/eza --color=always --icons=always --git --long --all"
             alias lt="${pkgs.eza}/bin/eza --color=always --icons=always --git --tree"
@@ -174,8 +180,9 @@
             fastfetch
             rich "[b white on red]My nixed shell for development![/]
 
-[b black on white]rundoom[/]    - run doomemacs
-[b black on white]setup-doom[/] - setup doom (takes a while compiling packages)
+[b black on white]boris-shell[/]    - this pre-cooked shell environment
+[b black on white]rundoom[/]        - run doomemacs
+[b black on white]setup-doom[/]     - setup doom (takes a while compiling packages)
 " --print --padding 1 -p -a heavy -c
         '';
           };
