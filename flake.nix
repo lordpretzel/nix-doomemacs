@@ -120,7 +120,7 @@
 
           # script to use in package to setup and run doom
           rundoom = app_with_correct_bash "run-doom.sh" [] ''
-             ${pkgs.emacs29}/bin/emacs --init-directory "$HOME/${doomemacsdir}"
+             ${pkgs.emacs29}/bin/emacs --init-directory "$HOME/${doomemacsdir}" "$@"
           '';
 
 
