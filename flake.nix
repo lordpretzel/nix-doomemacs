@@ -59,7 +59,8 @@
             jq
             mg
             rsync
-            nerdfonts
+            nerd-fonts.symbols-only
+            nerd-fonts.jetbrains-mono
             htop
             btop
             gnutar
