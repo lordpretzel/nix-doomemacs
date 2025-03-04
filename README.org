@@ -8,7 +8,7 @@ rundoom # run doom emacs
 setup-doom # setup doom (downloads and compiles emacs packages
 #+end_src
 
-- run directly from github (the shell setup)
+- run directly from github (the custom bash shell)
 
 #+begin_src sh
 nix develop github:lordpretzel/nix-doomemacs
