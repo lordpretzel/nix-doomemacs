@@ -124,6 +124,9 @@
              ${pkgs.emacs29}/bin/emacs --init-directory "$HOME/${doomemacsdir}" "$@"
           '';
 
+          termdoom = app_with_correct_bash "term-doom.sh" [] ''
+             ${pkgs.emacs29}/bin/emacs --init-directory "$HOME/${doomemacsdir}" -nw "$@"
+          '';
 
           setup-doom = app_with_correct_bash "setup-doom.sh" [] ''
              export DOOMDIR=~/${doomconfigdir}
