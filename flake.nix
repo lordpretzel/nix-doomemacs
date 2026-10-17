@@ -43,7 +43,7 @@
              else "");
 
           dependencies = (with pkgs; [
-            emacs30
+            emacs
             bat
             bashInteractive
             curl
