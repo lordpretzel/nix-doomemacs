@@ -121,16 +121,16 @@
 
           # script to use in package to setup and run doom
           rundoom = app_with_correct_bash "run-doom.sh" [] ''
-             ${pkgs.emacs30}/bin/emacs --init-directory "$HOME/${doomemacsdir}" "$@"
+             ${pkgs.emacs}/bin/emacs --init-directory "$HOME/${doomemacsdir}" "$@"
           '';
 
           termdoom = app_with_correct_bash "term-doom.sh" [] ''
-             ${pkgs.emacs30}/bin/emacs --init-directory "$HOME/${doomemacsdir}" -nw "$@"
+             ${pkgs.emacs}/bin/emacs --init-directory "$HOME/${doomemacsdir}" -nw "$@"
           '';
 
           setup-doom = app_with_correct_bash "setup-doom.sh" [] ''
              export DOOMDIR=~/${doomconfigdir}
-             export EMACS=${pkgs.emacs30}/bin/emacs
+             export EMACS=${pkgs.emacs}/bin/emacs
              export PATH=~/${doomemacsdir}/bin:$PATH
              export SHELL=${pkgs.bashInteractive}/bin/bash
              if [ ! -d ~/${doomemacsdir} ]; then
@@ -160,7 +160,7 @@
             ${thepath}
             ${locales}
             export GIT_CONFIG=@@out@@/share/.gitconfig
-            export EMACS=${pkgs.emacs30}/bin/emacs
+            export EMACS=${pkgs.emacs}/bin/emacs
             export DOOMDIR=~/${doomconfigdir}
             export SHELL=${pkgs.bashInteractive}/bin/bash
             source ${pkgs.git}/share/bash-completion/completions/git-prompt.sh
@@ -174,7 +174,7 @@
             source ${pkgs.fzf-git-sh}/share/fzf-git-sh/fzf-git.sh
             export PATH=~/${doomemacsdir}/bin:$PATH
             export PATH=@@out@@/bin:$PATH
-            alias doomemacs="${pkgs.emacs30}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
+            alias doomemacs="${pkgs.emacs}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
             alias ll="${pkgs.eza}/bin/eza --color=always --icons=always --git --long --all"
             alias lt="${pkgs.eza}/bin/eza --color=always --icons=always --git --tree"
             alias llt="${pkgs.eza}/bin/eza --color=always --icons=always --git --long --tree"
@@ -241,7 +241,7 @@
               shellHook = ''
         ${locales}
         export GIT_CONFIG=${self}/.gitconfig
-        export EMACS=${pkgs.emacs30}/bin/emacs
+        export EMACS=${pkgs.emacs}/bin/emacs
         export DOOMDIR=~/${doomconfigdir}
         export SHELL=${pkgs.bashInteractive}/bin/bash
 
@@ -254,7 +254,7 @@
         source ${self}/shellsetup.sh
         source ${pkgs.fzf}/share/fzf/key-bindings.bash
         export PATH=~/${doomemacsdir}/bin:$PATH
-        alias doomemacs="${pkgs.emacs30}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
+        alias doomemacs="${pkgs.emacs}/bin/emacs --init-directory \"$HOME/${doomemacsdir}\""
         fastfetch
         rich "[b white on red]My nixed shell for development![/]
 
